@@ -24,6 +24,12 @@ export default function Authenticated({ auth, header, children }) {
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
                                 </NavLink>
+                                <NavLink href={route('invoice.index')} active={route().current('invoice.index')}>
+                                    Factures
+                                </NavLink>
+                                <NavLink href={route('invoice.byYear', '2022')} active={route().current('invoice.byYear')}>
+                                    Factures 2022
+                                </NavLink>
                             </div>
                         </div>
 

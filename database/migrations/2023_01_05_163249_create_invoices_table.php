@@ -18,7 +18,7 @@ return new class extends Migration
             $table->char('number', 100);
             $table->foreignId('client_id')->constrained();
             $table->date('edited_at');
-            $table->date('paid_at');
+            $table->date('paid_at')->nullable();
             $table->boolean('with_vat');
             $table->boolean('sent');
             $table->boolean('payment_received');
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->float('amount');
             $table->float('amount_with_vat');
             $table->float('vat');
-            $table->enum('payment_mode', ['chèque','virement','autre']);
+            $table->enum('payment_mode', ['chèque','virement','autre'])->nullable();
             $table->timestamps();
         });
     }
