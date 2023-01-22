@@ -14,9 +14,6 @@ class InvoiceMonthResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'label' => $this->label,
-            'amount' => $this->amount,
-        ];
+        return parent::toArray($request);
     }
 }

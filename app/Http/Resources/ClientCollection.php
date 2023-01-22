@@ -17,6 +17,8 @@ class ClientCollection extends ResourceCollection
         return $this->collection->map->only(
             'id',
             'name',
+            'created_at',
+            'updated_at',
         );
     }
 }

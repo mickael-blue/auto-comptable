@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Client;
 use App\Models\Invoice;
+use App\Services\InvoiceService;
 use App\Http\Requests\InvoiceRequest;
 use App\Http\Resources\InvoiceResource;
 use Illuminate\Support\Facades\Request;
 use App\Http\Resources\ClientCollection;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Resources\InvoiceCollection;
+use App\Http\Requests\InvoiceUpdateRequest;
 use App\Http\Resources\InvoiceMonthCollection;
-use App\Http\Resources\InvoicesStatsCollection;
 
 class InvoiceController extends Controller
 {
@@ -21,16 +22,20 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($year = null)
     {
+        $invoices = Invoice::orderBy('created_at', 'desc');
+        if(!is_null($year)){
+            $invoices = $invoices->byYear($year);
+        }
+        $invoices = $invoices
+            ->paginate()
+            ->appends(Request::all());
         return Inertia::render('Invoices/Index', [
-            'invoices' => new InvoiceCollection(
-                Invoice::orderBy('number')
-                    ->paginate()
-                    ->appends(Request::all())
-            ),
+            'invoices' => new InvoiceCollection($invoices),
         ]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,26 +43,14 @@ class InvoiceController extends Controller
      */
     public function current_year($year)
     {
-        $invoicesYear = Invoice::orderBy('number')
-            ->whereBetween('edited_at', [$year.'-01-01', $year.'-12-31'])
-            ->paginate()
-            ->appends(Request::all());
-
-        $months = [];
-        foreach($invoicesYear as $invoice)
-        {
-
-            if(isset($months[date('n', strtotime($invoice->edited_at))])){
-                $months[date('n', strtotime($invoice->edited_at))]['amount'] += $invoice->amount_with_vat;
-            }else{
-                $months[date('n', strtotime($invoice->edited_at))]['amount'] = $invoice->amount_with_vat;
-                $months[date('n', strtotime($invoice->edited_at))]['label'] = date('F', strtotime($invoice->edited_at));
-            }
-        }
+        $invoicesYear = InvoiceService::byYear($year)->get();
+        $invoicesMonthly = InvoiceService::monthlyStats($invoicesYear);
+        $invoicesTotals = InvoiceService::totals($invoicesYear);
 
         return Inertia::render('Invoices/CurrentYear', [
             'invoices' => new InvoiceCollection($invoicesYear),
-            'months' => new InvoiceMonthCollection(collect($months)),
+            'months' => new InvoiceMonthCollection($invoicesMonthly),
+            'totals' => $invoicesTotals,
             'year' => $year
         ]);
     }
@@ -69,9 +62,9 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $mangas = Client::all();
+        $clients = Client::all();
         return Inertia::render('Invoices/Create', [
-            'mangas' => new ClientCollection($mangas),
+            'clients' => new ClientCollection($clients),
         ]);
     }
 
@@ -96,10 +89,10 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        $mangas = Client::all();
+        $clients = Client::all();
         return Inertia::render('Invoices/Edit', [
             'invoice' => new InvoiceResource($invoice),
-            'mangas' => new ClientCollection($mangas),
+            'clients' => new ClientCollection($clients),
         ]);
     }
 
@@ -110,8 +103,9 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
-    public function update(InvoiceRequest $request, Invoice $invoice)
+    public function update(InvoiceUpdateRequest $request, Invoice $invoice)
     {
+        // dd($request->validated());
         $invoice->update($request->validated());
         return Redirect::route('invoice.edit',$invoice->id);
     }

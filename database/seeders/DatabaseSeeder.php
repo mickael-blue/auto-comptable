@@ -19,11 +19,18 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        \App\Models\User::factory()->create([
+            'name' => 'Mickael',
+            'email' => 'mickael@freelance.blue',
+            'password' => '$2y$10$EN25.Qq8RS94T.AAdEfjrOG47bjSDuvpaGHlFvyVuPxoUOWjyuhxi' // test1234
+        ]);
         Client::factory()->count(10)->create();
-        Invoice::factory()->count(40)->create();
+        Invoice::factory()->count(80)->create([
+            'status' => 'payée'
+        ]);
+        Invoice::factory()->count(5)->create([
+            'status' => 'envoyée',
+            'paid_at' => null,
+        ]);
     }
 }

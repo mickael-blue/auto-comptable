@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class InvoiceMonthCollection extends ResourceCollection
 {
+
     /**
      * Transform the resource collection into an array.
      *
@@ -14,10 +15,26 @@ class InvoiceMonthCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        // dd($this->collection);
-        return $this->collection->map->only(
-            'label',
-            'amount',
-        );
+
+
+
+        return [
+            'data' => $this->collection->sortBy('month')->toArray(),
+            'sum' => [
+                'amount_with_vat' => [
+                    'month' => round($this->collection->sum('amount_with_vat')/12),
+                    'day' => round(($this->collection->sum('amount_with_vat')/12)/20)
+                ],
+                'amount' => [
+                    'month' => round($this->collection->sum('amount')/12),
+                    'day' => round(($this->collection->sum('amount')/12)/20)
+                ],
+                'vat' => [
+                    'month' => round($this->collection->sum('vat')/12),
+                    'day' => round(($this->collection->sum('vat')/12)/20)
+                ]
+            ]
+        ];
+        return parent::toArray($request);
     }
 }

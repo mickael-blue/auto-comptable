@@ -17,12 +17,10 @@ class InvoiceCollection extends ResourceCollection
         return $this->collection->map->only(
             'id',
             'number',
+            'status',
             'client',
-            'edited_at',
             'paid_at',
             'with_vat',
-            'sent',
-            'payment_received',
             'title',
             'amount',
             'amount_with_vat',

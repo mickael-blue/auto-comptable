@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProfileController;
 
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
 
     // Invoice Routes
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoice.index');
+    Route::get('/invoices/{year}', [InvoiceController::class, 'index'])->name('invoice.index_year');
     Route::get('/invoice', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
     Route::get('/invoice/{invoice}', [InvoiceController::class, 'edit'])->name('invoice.edit');
@@ -45,6 +47,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/invoices-by-year/{year}', [InvoiceController::class, 'current_year'])->name('invoice.byYear');
 
+    // Client Routes
+
+    Route::get('/clients', [ClientController::class, 'index'])->name('client.index');
+    Route::get('/client', [InvoiceController::class, 'create'])->name('client.create');
+    Route::post('/client', [InvoiceController::class, 'store'])->name('client.store');
+    Route::get('/client/{client}', [InvoiceController::class, 'edit'])->name('client.edit');
+    Route::put('/client/{client}', [InvoiceController::class, 'update'])->name('client.update');
+    Route::delete('/client/{client}', [InvoiceController::class, 'destroy'])->name('client.destroy');
 
 });
 

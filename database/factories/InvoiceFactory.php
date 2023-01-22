@@ -31,22 +31,25 @@ class InvoiceFactory extends Factory
         $amount = $amount_with_vat - $vat;
 
 
-        $editedAt = fake()->dateTimeBetween('-2 years');
-        $payment_received = fake()->boolean();
+        $createdAt = fake()->dateTimeBetween('-5 years');
+        $status = 'payée'; // Pas d'annulées
+        $updatedAt = $sent_at = fake()->dateTimeInInterval($createdAt, '+20 days');
+        $paid_at = fake()->dateTimeInInterval($sent_at, '+25 days');
 
         return [
-            'number' => fake()->numberBetween(0, 100),
+            'number' => fake()->numerify(),
             'client_id' => Client::all()->random(),
-            'edited_at' => $editedAt,
-            'paid_at' => $payment_received?fake()->dateTimeInInterval($editedAt, '+45 days'):null,
+            'status' => $status,
+            'sent_at' => $sent_at,
+            'paid_at' => $paid_at,
             'with_vat' => fake()->boolean(),
-            'sent' => 1,
-            'payment_received' => $payment_received,
             'title' => fake()->sentence(),
             'amount' => $amount,
             'amount_with_vat' => $amount_with_vat,
             'vat' => $vat,
-            'payment_mode' => fake()->randomElement(['chèque','virement','autre'])
+            'payment_mode' => fake()->randomElement(['chèque', 'virement', 'autre']),
+            'created_at'=> $createdAt,
+            'updated_at'=> $updatedAt,
         ];
     }
 }
