@@ -24,16 +24,29 @@ class InvoiceController extends Controller
      */
     public function index($year = null)
     {
-        $invoices = Invoice::orderBy('created_at', 'desc');
         if(!is_null($year)){
-            $invoices = $invoices->byYear($year);
+            $data = $this->all_by_year($year);
+        }else{
+            $data = $this->all_by_year(date('Y'));
         }
-        $invoices = $invoices
+        return Inertia::render('Invoices/Index', $data);
+    }
+
+    public function all_by_year($year) {
+        $invoices = Invoice::orderBy('created_at', 'desc')
+            ->byYear($year)
             ->paginate()
             ->appends(Request::all());
-        return Inertia::render('Invoices/Index', [
+        $invoicesMonthly = InvoiceService::monthlyStats($invoices);
+        $invoicesTotals = InvoiceService::totals($invoices);
+
+        return [
             'invoices' => new InvoiceCollection($invoices),
-        ]);
+            'months' => new InvoiceMonthCollection($invoicesMonthly),
+            'totals' => $invoicesTotals,
+            'year' => $year
+        ];
+
     }
 
     /**
