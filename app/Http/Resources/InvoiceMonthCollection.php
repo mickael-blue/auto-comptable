@@ -15,9 +15,6 @@ class InvoiceMonthCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-
-
-
         return [
             'data' => $this->collection->sortBy('month')->toArray(),
             'sum' => [
@@ -35,6 +32,5 @@ class InvoiceMonthCollection extends ResourceCollection
                 ]
             ]
         ];
-        return parent::toArray($request);
     }
 }

@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Resources\InvoiceCollection;
 use App\Http\Requests\InvoiceUpdateRequest;
 use App\Http\Resources\InvoiceMonthCollection;
+use App\Http\Resources\InvoiceClientCollection;
+use App\Http\Resources\InvoiceTrimesterCollection;
 
 class InvoiceController extends Controller
 {
@@ -38,11 +40,15 @@ class InvoiceController extends Controller
             ->paginate()
             ->appends(Request::all());
         $invoicesMonthly = InvoiceService::monthlyStats($invoices);
+        $invoicesTrimesters = InvoiceService::trimestersStats($invoices);
+        $invoicesClient = InvoiceService::clientsStats($invoices);
         $invoicesTotals = InvoiceService::totals($invoices);
 
         return [
             'invoices' => new InvoiceCollection($invoices),
             'months' => new InvoiceMonthCollection($invoicesMonthly),
+            'trimesters' => new InvoiceTrimesterCollection($invoicesTrimesters),
+            'clients' => new InvoiceClientCollection($invoicesClient),
             'totals' => $invoicesTotals,
             'year' => $year
         ];
@@ -58,12 +64,14 @@ class InvoiceController extends Controller
     {
         $invoicesYear = InvoiceService::byYear($year)->get();
         $invoicesMonthly = InvoiceService::monthlyStats($invoicesYear);
+        $invoicesTrimesters = InvoiceService::trimestersStats($invoicesYear);
         $invoicesTotals = InvoiceService::totals($invoicesYear);
 
         return Inertia::render('Invoices/CurrentYear', [
             'invoices' => new InvoiceCollection($invoicesYear),
             'months' => new InvoiceMonthCollection($invoicesMonthly),
             'totals' => $invoicesTotals,
+            'trimesters' => $invoicesTrimesters,
             'year' => $year
         ]);
     }

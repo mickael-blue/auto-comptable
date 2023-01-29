@@ -1,9 +1,9 @@
 import LabelPrice from "@/Components/LabelPrice";
 
-export default function MonthTable({ months }) {
+export default function MonthTable({ months, className }) {
     return (
-        <div className="overflow-x-auto mb-2">
-            <table className="table table-zebra table-compact w-full bordered">
+        <div className={"overflow-x-auto " + className}>
+            <table className="table table-compact w-full bordered">
                 <thead>
                     <tr>
                         <th>Mois</th>
@@ -14,13 +14,13 @@ export default function MonthTable({ months }) {
                 </thead>
                 <tbody>
                     {months.data.map(
-                        ({ label, amount, amount_with_vat, vat }) => {
+                        ({ label, amount, amount_with_vat, vat, color }) => {
                             return (
-                                <tr key={label}>
-                                    <td>{label}</td>
-                                    <td className="text-right"><LabelPrice>{amount_with_vat}</LabelPrice></td>
-                                    <td className="text-right"><LabelPrice>{amount}</LabelPrice></td>
-                                    <td className="text-right"><LabelPrice>{vat}</LabelPrice></td>
+                                <tr key={label} className={'bg-['+color+']'}>
+                                    <td className={'!bg-['+color+']'}>{label}</td>
+                                    <td className={'!bg-['+color+'] text-right'}><LabelPrice>{amount_with_vat}</LabelPrice></td>
+                                    <td className={'!bg-['+color+'] text-right'}><LabelPrice>{amount}</LabelPrice></td>
+                                    <td className={'!bg-['+color+'] text-right'}><LabelPrice>{vat}</LabelPrice></td>
                                 </tr>
                             );
                         }

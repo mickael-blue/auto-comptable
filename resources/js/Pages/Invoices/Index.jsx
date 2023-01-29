@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, usePage } from "@inertiajs/inertia-react";
 import TabList from "./Partials/TabList";
 import Summary from "./Partials/Summary";
-import Graph from "./Partials/Graph";
+import Graphs from "./Partials/Graphs";
 
 export default function Index({ auth }) {
     const [activeTab, setActiveTab] = useState("tab1");
@@ -43,8 +43,8 @@ export default function Index({ auth }) {
                 </div>
                 <div className="max-w-full mx-auto sm:p-6 lg:p-4 border border-base-100 bg-base-100 rounded-md">
                     {activeTab === "tab1" && <TabList invoices={invoices} />}
-                    {activeTab === "tab2" && <Summary invoices={invoices} />}
-                    {activeTab === "tab3" && <Graph invoices={invoices} />}
+                    {activeTab === "tab2" && <Summary/>}
+                    {activeTab === "tab3" && <Graphs/>}
                 </div>
             </div>
         </AuthenticatedLayout>

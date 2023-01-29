@@ -1,9 +1,15 @@
 import LabelPrice from "@/Components/LabelPrice";
 
-export default function TotalTable({ totals }) {
+export default function TotalTable({ totals, className}) {
     return (
-        <div className="overflow-x-auto">
+        <div className={"overflow-x-auto " + className}>
             <table className="table table-zebra table-compact w-full">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th className="text-right">Total</th>
+                    </tr>
+                </thead>
                 <tbody>
                     <tr>
                         <td>CA Brut (prévisionnel)</td>
@@ -11,7 +17,7 @@ export default function TotalTable({ totals }) {
                     </tr>
                     <tr>
                         <td>CA Brut (Encaissé)</td>
-                        <td className="text-right"><LabelPrice>{totals.cached}</LabelPrice></td>
+                        <td className="text-right"><LabelPrice>{totals.collected}</LabelPrice></td>
                     </tr>
                     <tr>
                         <td>TVA</td>
@@ -19,7 +25,7 @@ export default function TotalTable({ totals }) {
                     </tr>
                     <tr>
                         <td>À encaisser</td>
-                        <td className="text-right"><LabelPrice>{totals.to_cached}</LabelPrice></td>
+                        <td className="text-right"><LabelPrice>{totals.to_collected}</LabelPrice></td>
                     </tr>
                     <tr>
                         <td>Cotisations</td>
