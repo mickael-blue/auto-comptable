@@ -45,10 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
     Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 
-    Route::get('/invoices-by-year/{year}', [InvoiceController::class, 'current_year'])->name('invoice.byYear');
-
     // Client Routes
-
     Route::get('/clients', [ClientController::class, 'index'])->name('client.index');
     Route::get('/client', [InvoiceController::class, 'create'])->name('client.create');
     Route::post('/client', [InvoiceController::class, 'store'])->name('client.store');

@@ -56,27 +56,6 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function current_year($year)
-    {
-        $invoicesYear = InvoiceService::byYear($year)->get();
-        $invoicesMonthly = InvoiceService::monthlyStats($invoicesYear);
-        $invoicesTrimesters = InvoiceService::trimestersStats($invoicesYear);
-        $invoicesTotals = InvoiceService::totals($invoicesYear);
-
-        return Inertia::render('Invoices/CurrentYear', [
-            'invoices' => new InvoiceCollection($invoicesYear),
-            'months' => new InvoiceMonthCollection($invoicesMonthly),
-            'totals' => $invoicesTotals,
-            'trimesters' => $invoicesTrimesters,
-            'year' => $year
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

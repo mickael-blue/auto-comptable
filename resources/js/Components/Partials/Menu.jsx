@@ -48,14 +48,6 @@ export default function Menu({ years, className, tabIndex }) {
             </li>
             <li>
                 <NavLink
-                    href={route("invoice.byYear", "2022")}
-                    active={route().current("invoice.byYear")}
-                >
-                    Factures 2022
-                </NavLink>
-            </li>
-            <li>
-                <NavLink
                     href={route("client.index")}
                     active={route().current("client.index")}
                 >
