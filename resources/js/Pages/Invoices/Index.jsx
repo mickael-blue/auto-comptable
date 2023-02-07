@@ -7,7 +7,7 @@ import Graphs from "./Partials/Graphs";
 
 export default function Index({ auth }) {
     const [activeTab, setActiveTab] = useState("tab1");
-    const { invoices } = usePage().props;
+    const { invoices, clients } = usePage().props;
     return (
         <AuthenticatedLayout auth={auth}>
             <Head title="Factures" />
@@ -44,7 +44,7 @@ export default function Index({ auth }) {
                 <div className="max-w-full mx-auto sm:p-6 lg:p-4 border border-base-100 bg-base-100 rounded-md">
                     {activeTab === "tab1" && <TabList invoices={invoices} />}
                     {activeTab === "tab2" && <Summary/>}
-                    {activeTab === "tab3" && <Graphs/>}
+                    {activeTab === "tab3" && <Graphs invoices={invoices} clients={clients}/>}
                 </div>
             </div>
         </AuthenticatedLayout>
