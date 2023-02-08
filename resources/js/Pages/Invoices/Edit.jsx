@@ -5,6 +5,7 @@ import InputLabel from "@/Components/Forms/InputLabel";
 import SelectInput from "@/Components/Forms/SelectInput";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/Forms/TextInput";
+import Autocomplete from "@/Components/Forms/AutocompleteInput";
 import PriceInput from "@/Components/Forms/PriceInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import LabelPrice from "@/Components/LabelPrice";
@@ -24,6 +25,7 @@ export default function Edit(props) {
         number: invoice.number,
         title: invoice.title,
         client_id: invoice.client.id,
+        client: invoice.client,
         amount: invoice.amount,
         status: invoice.status,
         with_vat: invoice.with_vat,
@@ -110,14 +112,12 @@ export default function Edit(props) {
                             <div className="form-control">
                                 <InputLabel for="client" value="Client" />
 
-                                <SelectInput
+                                <Autocomplete
                                     id="client"
+                                    name="client"
                                     value={data.client_id}
                                     className="w-full max-w-xs"
                                     options={clientsOption}
-                                    handleChange={(e) =>
-                                        setData("client_id", e.target.value)
-                                    }
                                     required
                                 />
 
